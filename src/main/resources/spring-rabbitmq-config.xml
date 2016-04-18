@@ -10,30 +10,23 @@ http://www.springframework.org/schema/beans/spring-beans-4.0.xsd http://www.spri
 	<context:annotation-config />
 
 	<!-- 连接rabbitmq集群 -->
-	<rabbit:connection-factory id="connectionFactory"
-		username="admin" password="123456" addresses="192.168.6.200,192.168.6.201" />
-
+	<rabbit:connection-factory id="connectionFactory" username="admin" password="123456" addresses="192.168.6.200,192.168.6.201" />
 	<rabbit:admin id="amqpAdmin" connection-factory="connectionFactory" />
-
 	<!-- queue 队列声明 -->
 	<rabbit:queue id="rabbit_queue_one" durable="true" auto-delete="false" exclusive="false" name="rabbit_queue_one" />
-
 	<!-- exchange queue binging key 绑定 -->
-	<rabbit:direct-exchange name="mq-exchange"
-		durable="true" auto-delete="false" id="mq-exchange">
+	<rabbit:direct-exchange name="mq-exchange" durable="true" auto-delete="false" id="mq-exchange">
 		<rabbit:bindings>
 			<rabbit:binding queue="rabbit_queue_one" key="rabbit_queue_one" />
 		</rabbit:bindings>
 	</rabbit:direct-exchange>
-
 	<!-- spring template声明 -->
-	<rabbit:template id="amqpTemplate" exchange="mq-exchange" 
-		connection-factory="connectionFactory" />
+	<rabbit:template id="amqpTemplate" exchange="mq-exchange"  connection-factory="connectionFactory" />
 
-	<!-- queue litener 观察 监听模式 当有消息到达时会通知监听在对应的队列上的监听对象 taskExecutor这个需要自己实现一个连接池 
-		按照官方说法 除非特别大的数据量 一般不需要连接池 -->
+	<!-- 消息监听，当有消息到达时会通知监听在对应的队列上的监听对象，可以用taskExecutor这个需要自己实现一个连接池，除非特别大的数据量，一般不需要连接池
+	 channel-transacted模式是关闭的可根据需要开启，acknowledge="manual"需要自行处理应答否则会形成消息堆积 -->
 	<rabbit:listener-container
-		connection-factory="connectionFactory" acknowledge="auto">
+		connection-factory="connectionFactory" prefetch="1"  acknowledge="manual">
 		<rabbit:listener queues="rabbit_queue_one" ref="messageConsumerService" />
 	</rabbit:listener-container>
 </beans>

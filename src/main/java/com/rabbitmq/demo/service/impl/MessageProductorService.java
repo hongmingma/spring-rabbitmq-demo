@@ -27,7 +27,7 @@ public class MessageProductorService {
 	public void popMessage(String destinationQueueName) {
 		Message message = amqpTemplate.receive(destinationQueueName);
 		if (message != null) {
-			System.out.println("成功取出消息 " + new String(message.getBody()));
+			System.out.println("主动取出消息成功： " + new String(message.getBody()));
 		}
 
 	}

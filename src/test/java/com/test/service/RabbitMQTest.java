@@ -21,17 +21,24 @@ public class RabbitMQTest {
 
 	@Test
 	public void testMessageQueue() {
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			messageProductorService.pushToMessageQueue("rabbit_queue_one", "hello world" + i);
 			System.out.println("成功插入消息 " + "hello world" + i);
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
 		}
-
+		try {
+			Thread.sleep(1000000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		// while (true) {
+		// try {
+		// Thread.sleep(1000);
+		// } catch (InterruptedException e) {
+		// e.printStackTrace();
+		// }
 		// messageProductorService.popMessage("rabbit_queue_one");
+		// }
+
 	}
 
 }
