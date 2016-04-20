@@ -14,7 +14,6 @@ public class MessageConsumerService implements ChannelAwareMessageListener {
 	public void onMessage(Message message, Channel channel) throws Exception {
 		// TODO 模拟消费者处理数据的逻辑
 		System.out.println("收到消息了：" + new String(message.getBody()));
-		Thread.sleep(100);
 
 		// 需要自行处理消息应答，否则会形成消息堆积
 		MessageProperties mp = message.getMessageProperties();

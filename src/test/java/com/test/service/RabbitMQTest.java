@@ -21,23 +21,32 @@ public class RabbitMQTest {
 
 	@Test
 	public void testMessageQueue() {
-		for (int i = 0; i < 10; i++) {
-			messageProductorService.pushToMessageQueue("rabbit_queue_one", "hello world" + i);
+		for (int i = 0; i < 20; i++) {
+			messageProductorService.pushToMessageQueue("rabbit_queue_one", "helloworld" + i);
 			System.out.println("成功插入消息 " + "hello world" + i);
 		}
+		// 一个队列可以并发读，但是每个消息不能并发读到
+		// for (int i = 0; i < 200; i++) {
+		// new Thread(new Runnable() {
+		//
+		// @Override
+		// public void run() {
+		// messageProductorService.popMessage("rabbit_queue_one");
+		// try {
+		// Thread.sleep(3000);
+		// } catch (InterruptedException e) {
+		// e.printStackTrace();
+		// }
+		// }
+		// }).start();
+		//
+		// }
+
 		try {
 			Thread.sleep(1000000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		// while (true) {
-		// try {
-		// Thread.sleep(1000);
-		// } catch (InterruptedException e) {
-		// e.printStackTrace();
-		// }
-		// messageProductorService.popMessage("rabbit_queue_one");
-		// }
 
 	}
 
